@@ -1,0 +1,54 @@
+--- src/wcmCommon.c	2019-11-04 18:05:25.000000000 +0100
++++ ../xf86-input-wacom-0.39.0-fix/src/wcmCommon.c	2020-01-29 02:00:47.205891410 +0100
+@@ -33,6 +33,12 @@
+ 	.active = NULL,
+ };
+ 
++
++// fix
++int max_move = 200;
++int last_x = -1;
++int last_y = -1;
++
+ /* X servers pre 1.9 didn't copy data passed into xf86Post*Event.
+  * Data passed in would be modified, requiring the driver to copy the
+  * data beforehand.
+@@ -862,13 +868,32 @@
+ 	 * pointer x/y, suppress all but cursor movement. This return value
+ 	 * is used in commonDispatchDevice to short-cut event processing.
+ 	 */
+-	if ((abs(dsOrig->x - dsNew->x) > suppress) || 
+-			(abs(dsOrig->y - dsNew->y) > suppress)) 
+-	{
+-		if (returnV == SUPPRESS_ALL)
+-			returnV = SUPPRESS_NON_MOTION;
++	
++	 // fix
++	if (dsOrig->proximity == 0 && dsNew->proximity == 1)
++	{
++		last_x = dsNew->x;
++		last_y = dsNew->y;
++	}
++	 // fix
++	if ( (abs(last_x - dsNew->x) < max_move) &&  (abs(last_y - dsNew->y) < max_move) )
++	{
++		last_x = dsNew->x;
++		last_y = dsNew->y;
++		
++		if ((abs(dsOrig->x - dsNew->x) > suppress) || 
++				(abs(dsOrig->y - dsNew->y) > suppress)) 
++		{
++			if (returnV == SUPPRESS_ALL)
++				returnV = SUPPRESS_NON_MOTION;
++		}
++		else /* don't move cursor */
++		{
++			dsNew->x = dsOrig->x;
++			dsNew->y = dsOrig->y;
++		}
+ 	}
+-	else /* don't move cursor */
++	else
+ 	{
+ 		dsNew->x = dsOrig->x;
+ 		dsNew->y = dsOrig->y;
