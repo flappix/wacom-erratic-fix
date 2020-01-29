@@ -1,5 +1,5 @@
 --- src/wcmCommon.c	2019-11-04 18:05:25.000000000 +0100
-+++ ../xf86-input-wacom-0.39.0-fix/src/wcmCommon.c	2020-01-29 02:00:47.205891410 +0100
++++ ../xf86-input-wacom-0.39.0-fix/src/wcmCommon.c	2020-01-29 02:36:34.506080607 +0100
 @@ -33,6 +33,12 @@
  	.active = NULL,
  };
@@ -13,7 +13,7 @@
  /* X servers pre 1.9 didn't copy data passed into xf86Post*Event.
   * Data passed in would be modified, requiring the driver to copy the
   * data beforehand.
-@@ -862,13 +868,32 @@
+@@ -862,13 +868,33 @@
  	 * pointer x/y, suppress all but cursor movement. This return value
  	 * is used in commonDispatchDevice to short-cut event processing.
  	 */
@@ -29,8 +29,9 @@
 +		last_x = dsNew->x;
 +		last_y = dsNew->y;
 +	}
++	
 +	 // fix
-+	if ( (abs(last_x - dsNew->x) < max_move) &&  (abs(last_y - dsNew->y) < max_move) )
++	if ( dsNew->pressure == 0 || ( (abs(last_x - dsNew->x) < max_move) && (abs(last_y - dsNew->y) < max_move) ) )
 +	{
 +		last_x = dsNew->x;
 +		last_y = dsNew->y;
