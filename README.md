@@ -13,3 +13,8 @@ Tablets with this issue produce images like that when you are drawing
 4. Apply patch: ```cd xf86-input-wacom-0.39.0; patch src/wcmCommon.c < ../patch```
 4. build and install: ```./configure && make && sudo make install```
 
+
+## Configuration
+This patch ist just preventing large movements between two consecutive frames. The maximum allowed value is hard coded with ```200```. You might want to adjust this value according to your needs by changeing the line ```int max_move = 200;``` in the patch file.
+
+Too small values will disable you to draw fast lines while too high values will not fix the hardware issue.
