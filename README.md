@@ -7,6 +7,8 @@ Tablets with this issue produce images like that when you are drawing
 
 ## Installation
 
+Works only for Linux.
+
 1. Download xf86-input-wacom source code (tested with version 0.39.0): https://github.com/linuxwacom/xf86-input-wacom/releases
 2. Extract source code: ```tar -vxf xf86-input-wacom-0.39.0.tar.bz2```
 3. Download [patch](https://raw.githubusercontent.com/flappix/wacom-erratic-fix/master/patch) from this repository
