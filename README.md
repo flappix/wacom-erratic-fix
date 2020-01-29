@@ -15,6 +15,6 @@ Tablets with this issue produce images like that when you are drawing
 
 
 ## Configuration
-This patch prevents large cursor movements between two consecutive frames. The maximum allowed distance is hard coded with ```200```. You might want to adjust this value according to your needs by changeing the line ```int max_move = 200;``` in the patch file.
+This patch prevents large cursor movements between two consecutive frames. The maximum allowed distance is hard coded with ```200```. You might want to adjust this value according to your needs by changeing the line ```+int max_move = 200;``` in the patch file.
 
 Too small values will disable you to draw fast lines while too high values will not fix the hardware issue.
